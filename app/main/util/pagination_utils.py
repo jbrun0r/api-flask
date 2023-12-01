@@ -14,7 +14,7 @@ def get_paginate_parameters() -> dict[str, int]:
     """
     return {
         "page": request.args.get("page", 1, type=int),
-        "per_page": request.args.get("per_page", 2, type=int),
+        "per_page": request.args.get("per_page", 10, type=int),
         "max_per_page": 10,
     }
 

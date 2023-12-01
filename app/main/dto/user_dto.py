@@ -3,10 +3,6 @@ from flask_restx import Namespace, fields, inputs
 from .pagination_dto import PaginationDTO
 
 
-email_pattern = r"^(?:[\w]+|([-_.])(?!\1))+@+(?:[\w]+|([-_.])(?!\1))(\.[\w]{2,10})+$"
-phone_number_pattern = r"^$|^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$"
-
-
 class UserDTO:
     api = Namespace("user", description="User related operations")
 
@@ -58,15 +54,6 @@ class UserDTO:
         user_post,
     )
 
-    user_get = api.clone(
-        "UserGet",
-        user,
-    )
-
-    user_auth = api.inherit(
-        "UserAuth",
-        user,
-    )
 
     user_paged = api.clone(
         "UserPaged",
