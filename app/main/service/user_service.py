@@ -57,7 +57,7 @@ def save_new_user(data: dict, skip_commit: bool = False) -> User:
     return user
 
 
-def update_user(data: dict, user: User) -> User:
+def update_user(data: dict, id: int) -> User:
     """
     Update a user's information.
 
@@ -68,6 +68,11 @@ def update_user(data: dict, user: User) -> User:
     Returns:
         User: The updated user.
     """
+    if not validate(data["cpf"]):
+        raise APIError("The CPF provided is not valid.", code=406, api_code="INVALID_CPF")
+    
+    user = find_user_by(id=id)
+    
     for attribute, new_value in data.items():
         setattr(user, attribute, new_value)
     db.session.commit()
@@ -169,29 +174,3 @@ def get_all_users():
     """
     users_filter = get_user_filters()
     return paginate(User, filter=users_filter)
-
-
-def find_user_by_id(id: int) -> User:
-    """
-    Find a user by ID.
-
-    Args:
-        id (int): The ID of the user to find.
-        user (User): The user making the request.
-
-    Returns:
-        User: The found user.
-
-    Raises:
-        APIError: If the user is not found or the user does not have access.
-    """
-
-    user = User.query.filter_by(id=id).first()
-    if not user:
-        raise APIError(
-            "User ID does not exist. Please use an existing ID.",
-            code=404,
-            api_code="USER_NOT_FOUND",
-        )
-
-    return user
