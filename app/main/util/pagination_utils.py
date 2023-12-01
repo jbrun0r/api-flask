@@ -121,15 +121,18 @@ def get_user_filters() -> list:
     user_filter = []
     operator = "ILIKE"
     case = ""
+    args_list = ["name", "cpf", "age"]
 
     if "sqlite" in current_app.config["SQLALCHEMY_DATABASE_URI"]:
         operator = "LIKE"
         case = "COLLATE NOCASE"
 
     if value := request.args.get("search", default=None, type=str):
-        user_filter.append(text(f"(name {operator} '%{value}%' {case} OR email {operator} '%{value}%' {case})"))
+        user_filter.append(text(f"(name {operator} '%{value}%' {case} OR age {operator} '%{value}%' {case})"))
+        return user_filter
 
-    if profile := request.args.get("profile", default=None, type=str):
-        user_filter.append(text(f"profile = '{profile}'"))
+    for arg in args_list:
+        if value := request.args.get(arg, default=None, type=str):
+            user_filter.append(text(f"{arg} {operator} '%{value}%' {case}"))
 
     return user_filter

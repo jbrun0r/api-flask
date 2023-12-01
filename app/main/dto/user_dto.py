@@ -1,4 +1,4 @@
-from flask_restx import Namespace, fields
+from flask_restx import Namespace, fields, inputs
 
 from .pagination_dto import PaginationDTO
 
@@ -12,6 +12,9 @@ class UserDTO:
 
     user_filters_parser = api.parser()
     user_filters_parser.add_argument("search", type=str, location="query")
+    user_filters_parser.add_argument("name", type=str, location="query")
+    user_filters_parser.add_argument("cpf",type=inputs.regex(r"(^\d{11}$)"), location="query",)
+    user_filters_parser.add_argument("age", type=str, location="query")
 
     user_put = api.model(
         "UserPut",
