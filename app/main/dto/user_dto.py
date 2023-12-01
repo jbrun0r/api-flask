@@ -3,6 +3,8 @@ from flask_restx import Namespace, fields, inputs
 from .pagination_dto import PaginationDTO
 
 
+id_pattern = r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
 class UserDTO:
     api = Namespace("user", description="User related operations")
 
@@ -49,7 +51,10 @@ class UserDTO:
     user = api.clone(
         "User",
         {
-            "id": fields.Integer(required=False),
+            "id": fields.String(
+                required=False,
+                pattern=id_pattern,
+                example="828666de-a8b9-43c9-86c8-767449a0fcbe"),
         },
         user_post,
     )

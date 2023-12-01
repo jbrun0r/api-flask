@@ -41,7 +41,7 @@ class UserResource(Resource):
         return save_new_user(data=data), 201
 
 
-@api.route("/<int:id>")
+@api.route("/<string:id>")
 class UserByIdResource(Resource):
     @api.doc(responses={
         404: "`USER_NOT_FOUND`",
@@ -50,7 +50,7 @@ class UserByIdResource(Resource):
     })
     @api.expect(_user_put, validate=True)
     @api.marshal_with(_user)
-    def put(self, id: int):
+    def put(self, id: str):
         """Update user by id"""
         data = request.json
         return update_user(data, id=id), 200
@@ -59,7 +59,7 @@ class UserByIdResource(Resource):
         404: "`USER_NOT_FOUND`"
     })
     @api.marshal_list_with(_user)
-    def get(self, id: int):
+    def get(self, id: str):
         """Get a registered user by id"""
         return find_user_by(id=id), 200
     
@@ -67,6 +67,6 @@ class UserByIdResource(Resource):
         404: "`USER_NOT_FOUND`",
         204: "User deleted"
     })
-    def delete(self, id: int):
+    def delete(self, id: str):
         """Delete user by id"""
         return delete_user(id=id), 204
