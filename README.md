@@ -39,6 +39,12 @@ flask setup_api_database
 python3 api.py
 ```
 
+or
+
+```shell
+docker-compose up
+```
+
 The API will be available at `http://localhost:5000`.
 
 ## API Endpoints
