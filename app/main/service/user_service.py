@@ -2,6 +2,7 @@ from .. import db
 from ..util.api_error import APIError
 from ..model import User
 from ..service.email_service import send_email
+from ..util.pagination_utils import paginate, get_user_filters
 from pycpfcnpj.cpfcnpj import validate
 
 
@@ -157,3 +158,13 @@ def reset_password(data: dict, token: str):
     user = find_user_by(email=email)
     user.password = generate_hashed_password(data["password"])
     db.session.commit()
+
+def get_all_users():
+    """
+    Get a paginated list of all users.
+
+    Returns:
+        Pagination: Paginated list of Users objects.
+    """
+    users_filter = get_user_filters()
+    return paginate(User, filter=users_filter)
