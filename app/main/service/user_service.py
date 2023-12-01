@@ -63,7 +63,7 @@ def update_user(data: dict, id: int) -> User:
 
     Args:
         data (dict): Updated user data.
-        user (User): The user to update.
+        id (int): The user to update.
 
     Returns:
         User: The updated user.
@@ -85,7 +85,7 @@ def update_user_password(data: dict, user: User):
 
     Args:
         data (dict): Password update data.
-        user (User): The user to update.
+        user (User): The id of user to update.
 
     Raises:
         APIError: If the password doesn't match or is invalid.
@@ -116,15 +116,15 @@ def deactivate_user(id: int, user_agent: User):
     db.session.commit()
 
 
-def delete_user(user: User):
+def delete_user(id: int):
     """
     Delete a user from the database.
 
     Args:
-        user (User): The user to delete.
+        id (int): The id of user to delete.
     """
-    if user.profile.value == _USER:
-        db.session.delete(user)
+    user = find_user_by(id=id)
+
     db.session.delete(user)
     db.session.commit()
 

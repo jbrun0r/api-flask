@@ -28,11 +28,6 @@ class UserResource(Resource):
     def get(self):
         """List all registered users."""
         return get_all_users(), 200
-
-    @api.response(204, "User deleted")
-    def delete(self, user):
-        """Delete self user"""
-        return delete_user(user), 204
     
     @api.expect(_user_post, validate=True)
     @api.doc(responses={
@@ -49,6 +44,11 @@ class UserResource(Resource):
 
 @api.route("/<int:id>")
 class UserByIdResource(Resource):
+    @api.doc(responses={
+        404: "`USER_NOT_FOUND`",
+        406: "`INVALID_CPF`",
+        409: "`USER_ALREADY_EXISTS`"
+    })
     @api.expect(_user_put, validate=True)
     @api.marshal_with(_user)
     def put(self, id: int):
@@ -56,11 +56,18 @@ class UserByIdResource(Resource):
         data = request.json
         return update_user(data, id=id), 200
     
-    @api.doc("registered student by id", responses={
-        403: "USER_FORBIDDEN_ACCESS",
-        404: "USER_NOT_FOUND"
+    @api.doc("find user by id", responses={
+        404: "`USER_NOT_FOUND`"
     })
     @api.marshal_list_with(_user)
     def get(self, id: int):
         """Get a registered user by id"""
         return find_user_by(id=id), 200
+    
+    @api.doc("delete user by id", responses={
+        404: "`USER_NOT_FOUND`",
+        204: "User deleted"
+    })
+    def delete(self, id: int):
+        """Delete user by id"""
+        return delete_user(id=id), 204
