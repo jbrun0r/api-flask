@@ -72,70 +72,10 @@ class APIError(HTTPException):
 
 
 API_ERROR_CODES = {
-    "FAILED_DECODE": {
-        "code": 400,
-        "name": "Bad Request",
-        "description": "Invalid token to decode. Maybe expired",
-    },
-    "WRONG_CONFIRM_PASSWORD": {
-        "code": 400,
-        "name": "Bad Request",
-        "description": "Password doesn't match",
-    },
     "INVALID_DATA": {
         "code": 400,
         "name": "Bad Request",
         "description": "Invalid Data.",
-    },
-    "FAILED_LOGIN": {
-        "code": 401,
-        "name": "Unauthorized",
-        "description": "Incorrect User or Password",
-    },
-    "EXPIRED_TOKEN": {
-        "code": 401,
-        "name": "Unauthorized",
-        "description": "Expired login token",
-    },
-    "INVALID_TOKEN": {
-        "code": 401,
-        "name": "Unauthorized",
-        "description": "Invalid login Token",
-    },
-    "TOKEN_IS_MISSING": {
-        "code": 401,
-        "name": "Unauthorized",
-        "description": "Token is missing.",
-    },
-    "WRONG_PASSWORD": {
-        "code": 401,
-        "name": "Unauthorized",
-        "description": "Invalid password",
-    },
-    "USER_ALREADY_ACCESSED": {
-        "code": 403,
-        "name": "Forbidden",
-        "description": "User has already logged in for the first time",
-    },
-    "DEACTIVATE_FORBIDDEN": {
-        "code": 403,
-        "name": "Forbidden",
-        "description": "Can't deactivate user.",
-    },
-    "PROFILE_FORBIDDEN_ACCESS": {
-        "code": 403,
-        "name": "Forbidden",
-        "description": "User cannot access",
-    },
-    "DECODED_USER_NOT_FOUND": {
-        "code": 404,
-        "name": "Not Found",
-        "description": "Decoded token does not refer to a user",
-    },
-    "EMAIL_NOT_FOUND": {
-        "code": 404,
-        "name": "Not Found",
-        "description": "User with this email doesn't exist!",
     },
     "PAGES_NOT_FOUND": {
         "code": 404,
@@ -156,21 +96,6 @@ API_ERROR_CODES = {
         "code": 409,
         "name": "Conflict",
         "description": "User already exists",
-    },
-    "USER_IS_ACTIVE": {
-        "code": 409,
-        "name": "Conflict",
-        "description": "User is already active",
-    },
-    "USER_ALREADY_ACTIVE": {
-        "code": 409,
-        "name": "Conflict",
-        "description": "User already exists and is active.",
-    },
-    "WRONG_NEW_PASSWORD": {
-        "code": 422,
-        "name": "Unprocessable Entity",
-        "description": "New password cannot be the same as the current one",
     },
     "INVALID_CPF": {
         "code": 406,

@@ -2,15 +2,14 @@ from flask import request
 from flask_restx import Resource
 
 from ..dto.user_dto import UserDTO
-from ..service.user_service import (deactivate_user, delete_user,
-                                    update_user, save_new_user, get_all_users,
+from ..service.user_service import (delete_user, update_user,
+                                    save_new_user, get_all_users,
                                     find_user_by)
 from ..dto.pagination_dto import PaginationDTO                                    
 
 api = UserDTO.api
 _user = UserDTO.user
 _user_post = UserDTO.user_post
-_user_get = UserDTO.user_get
 _user_put = UserDTO.user_put
 _pagination_parser = PaginationDTO.pagination_parser
 _user_filters_parser = UserDTO.user_filters_parser
