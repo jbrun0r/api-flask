@@ -172,4 +172,9 @@ API_ERROR_CODES = {
         "name": "Unprocessable Entity",
         "description": "New password cannot be the same as the current one",
     },
+    "INVALID_CPF": {
+        "code": 406,
+        "name": "Not Acceptable",
+        "description": "The CPF provided is not valid",
+    },
 }
