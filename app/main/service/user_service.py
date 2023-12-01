@@ -3,6 +3,7 @@ from ..util.api_error import APIError
 from ..model import User
 from ..util.pagination_utils import paginate, get_user_filters
 from pycpfcnpj.cpfcnpj import validate
+import uuid
 
 
 def find_user_by(**user_attr) -> User:
@@ -18,6 +19,13 @@ def find_user_by(**user_attr) -> User:
     Raises:
         APIError: If the user is not found.
     """
+    if 'id' in user_attr:
+        id_str = user_attr['id']
+        if len(id_str) != 36:
+            raise APIError("Invalid UUID format.", code=400, api_code="INVALID_UUID_FORMAT")
+        user_attr['id'] = uuid.UUID(id_str)
+
+
     if user := User.query.filter_by(**user_attr).first():
         return user
     raise APIError(
@@ -56,13 +64,13 @@ def save_new_user(data: dict, skip_commit: bool = False) -> User:
     return user
 
 
-def update_user(data: dict, id: int) -> User:
+def update_user(data: dict, id: str) -> User:
     """
     Update a user's information.
 
     Args:
         data (dict): Updated user data.
-        id (int): The user to update.
+        id (str): The user to update.
 
     Returns:
         User: The updated user.
@@ -78,12 +86,12 @@ def update_user(data: dict, id: int) -> User:
     return user
 
 
-def delete_user(id: int):
+def delete_user(id: str):
     """
     Delete a user from the database.
 
     Args:
-        id (int): The id of user to delete.
+        id (str): The id of user to delete.
     """
     user = find_user_by(id=id)
 

@@ -77,6 +77,11 @@ API_ERROR_CODES = {
         "name": "Bad Request",
         "description": "Invalid Data.",
     },
+    "INVALID_UUID_FORMAT": {
+        "code": 400,
+        "name": "Bad Request",
+        "description": "Invalid UUID format.",
+    },
     "PAGES_NOT_FOUND": {
         "code": 404,
         "name": "Not Found",
