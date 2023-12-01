@@ -26,7 +26,11 @@
    - Create a new PostgreSQL database for the API.
 
    ```shell
-   psql -U your_username -c "CREATE DATABASE api"
+   sudo -u postgres psql
+   ```
+
+   ```shell
+   CREATE DATABASE api;
    ```
 
 ## Usage
@@ -51,7 +55,6 @@ The API will be available at `http://localhost:5000`.
 
 The API provides the following endpoints:
 
-- `/auth` - Authentication endpoints
 - `/error` - API Error management endpoints
 - `/user` - User management endpoints
 
