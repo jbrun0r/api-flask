@@ -3,7 +3,8 @@ from flask_restx import Resource
 
 from ..dto.user_dto import UserDTO
 from ..service.user_service import (deactivate_user, delete_user,
-                                    update_user, save_new_user, get_all_users)
+                                    update_user, save_new_user, get_all_users,
+                                    find_user_by_id)
 from ..dto.pagination_dto import PaginationDTO                                    
 
 api = UserDTO.api
@@ -14,7 +15,6 @@ _user_put = UserDTO.user_put
 _pagination_parser = PaginationDTO.pagination_parser
 _user_filters_parser = UserDTO.user_filters_parser
 _user_paged = UserDTO.user_paged
-
 
 
 @api.route("/")
@@ -65,3 +65,12 @@ class UserByIdResource(Resource):
     def put(self, id: int, user):
         """Deactivate User by id"""
         return deactivate_user(id, user), 204
+    
+    @api.doc("registered student by id", responses={
+        403: "USER_FORBIDDEN_ACCESS",
+        404: "USER_NOT_FOUND"
+    })
+    @api.marshal_list_with(_user)
+    def get(self, id: int):
+        """Get a registered user by id"""
+        return find_user_by_id(id), 200
