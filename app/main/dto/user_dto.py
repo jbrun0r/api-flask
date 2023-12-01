@@ -1,6 +1,5 @@
 from flask_restx import Namespace, fields
 
-from ..model.user import Profile
 from .pagination_dto import PaginationDTO
 
 
@@ -13,7 +12,6 @@ class UserDTO:
 
     user_filters_parser = api.parser()
     user_filters_parser.add_argument("search", type=str, location="query")
-    user_filters_parser.add_argument("profile",type=str,choices=[profile for profile in Profile._member_names_ if profile != "student"])
 
     user_put = api.model(
         "UserPut",
@@ -24,34 +22,28 @@ class UserDTO:
                 max_length=80,
                 example="João Bruno Rodrigues"
             ),
-            "phone_number": fields.String(
+            "cpf": fields.String(
                 required=True,
-                description="User phone number",
+                description="User cpf",
                 max_length=11,
-                example="85999999999",
-                pattern=phone_number_pattern,
+                pattern=r"^\d{11}$",
+                example="07329815473",
+            ),
+            "age": fields.String(
+                required=True,
+                description="User age",
+                max_length=3,
+                pattern=r"^\d+$",
+                example="22",
             ),
         },
         strict=True,
     )
 
-    user_email = api.model(
-        "UserEmail",
-        {
-            "email": fields.String(
-                required=True,
-                description="User's email",
-                example="jbrun0r@github.com",
-                max_length=128,
-                pattern=email_pattern,
-            ),
-        },
-        strict=True,
-    )
+    
     user_post = api.clone(
         "UserPost",
         user_put,
-        user_email,
     )
     user_post.__strict__ = True
 
@@ -59,12 +51,6 @@ class UserDTO:
         "User",
         {
             "id": fields.Integer(required=False),
-            "profile": fields.String(
-                enum=Profile._member_names_,
-                default="user",
-                description="User's profile",
-            ),
-            "activation_status": fields.Boolean(description="User status."),
         },
         user_post,
     )

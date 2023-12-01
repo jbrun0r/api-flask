@@ -1,7 +1,6 @@
 from flask import Blueprint
 from flask_restx import Api
 
-from .main.controller.auth_controller import api as auth_ns
 from .main.controller.error_controller import _error_response, api as error_ns
 from .main.controller.user_controller import api as user_ns
 from .main.util.api_error import APIError
@@ -17,7 +16,6 @@ api = Api(blueprint,
           contact_email="joaobruno.rf@gmail.com",
           )
 
-api.add_namespace(auth_ns, path="/auth")
 api.add_namespace(error_ns, path="/error")
 api.add_namespace(user_ns, path="/user")
 

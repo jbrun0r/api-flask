@@ -2,8 +2,7 @@ from .. import db
 from ..util.api_error import APIError
 from ..model import User
 from ..service.email_service import send_email
-from .auth_service import check_password, generate_hashed_password, generate_email_validation_token, decode_email_validation_token
-from ..util.auth_utils import _USER
+from pycpfcnpj.cpfcnpj import validate
 
 
 def find_user_by(**user_attr) -> User:
@@ -29,13 +28,12 @@ def find_user_by(**user_attr) -> User:
     )
 
 
-def save_new_user(data: dict, send_default_mail: bool = True, skip_commit: bool = False) -> User:
+def save_new_user(data: dict, skip_commit: bool = False) -> User:
     """
     Save a new user.
 
     Args:
         data (dict): User data.
-        send_default_mail (bool): Whether to send the default activation email.
         skip_commit (bool): Whether to skip committing to the database.
 
     Returns:
@@ -44,26 +42,17 @@ def save_new_user(data: dict, send_default_mail: bool = True, skip_commit: bool 
     Raises:
         APIError: If the user already exists.
     """
-    if "profile" not in data:
-        data["profile"] = _USER
-    if User.query.filter_by(email=data["email"]).first():
-        if user.activation_status:
-            raise APIError("User already exists and is active.", code=409, api_code="USER_ALREADY_ACTIVE")
-        else:
-            raise APIError("User already exists.", code=409, api_code="USER_ALREADY_EXISTS")
+    if not validate(data["cpf"]):
+        raise APIError("The CPF provided is not valid.", code=406, api_code="INVALID_CPF")
+
+    if User.query.filter_by(cpf=data["cpf"]).first():
+        raise APIError("User already exists.", code=409, api_code="USER_ALREADY_EXISTS")
 
     user = User(**data)
     if not skip_commit:
         db.session.add(user)
         db.session.commit()
 
-    if send_default_mail:
-        send_email(
-            email=data["email"],
-            template_name="USER_ACTIVATION.html",
-            message_subject="Token User Activation",
-            token_user_activation=f"{generate_email_validation_token(data['email'])}",
-        )
     return user
 
 
@@ -97,12 +86,6 @@ def update_user_password(data: dict, user: User):
     """
     if data["new_password"] != data["confirm_password"]:
         raise APIError("Password doesn't match", code=400, api_code="WRONG_CONFIRM_PASSWORD")
-    if not check_password(data["old_password"], user.password):
-        raise APIError("Invalid password", code=401, api_code="WRONG_PASSWORD")
-    if check_password(data["new_password"], user.password):
-        raise APIError("New password cannot be the same as the current one", code=422, api_code="WRONG_NEW_PASSWORD")
-
-    user.password = generate_hashed_password(data["new_password"])
     db.session.commit()
 
 
