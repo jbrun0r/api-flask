@@ -159,6 +159,7 @@ def reset_password(data: dict, token: str):
     user.password = generate_hashed_password(data["password"])
     db.session.commit()
 
+
 def get_all_users():
     """
     Get a paginated list of all users.
@@ -168,3 +169,29 @@ def get_all_users():
     """
     users_filter = get_user_filters()
     return paginate(User, filter=users_filter)
+
+
+def find_user_by_id(id: int) -> User:
+    """
+    Find a user by ID.
+
+    Args:
+        id (int): The ID of the user to find.
+        user (User): The user making the request.
+
+    Returns:
+        User: The found user.
+
+    Raises:
+        APIError: If the user is not found or the user does not have access.
+    """
+
+    user = User.query.filter_by(id=id).first()
+    if not user:
+        raise APIError(
+            "User ID does not exist. Please use an existing ID.",
+            code=404,
+            api_code="USER_NOT_FOUND",
+        )
+
+    return user
