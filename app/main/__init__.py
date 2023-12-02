@@ -6,7 +6,9 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from .config import config_by_name
 from .logger import get_logging_config
-from flask_cors import CORS 
+from flask_cors import CORS
+
+dictConfig(get_logging_config())
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,7 +19,6 @@ cors = CORS()
 
 def create_app(config_name: str) -> Flask:
     app.config.from_object(config_by_name[config_name])
-    dictConfig(get_logging_config())
     db.init_app(app)
     migrate.init_app(app, db)
     mail.init_app(app)
