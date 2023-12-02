@@ -46,7 +46,7 @@ python3 api.py
 or
 
 ```shell
-docker-compose up
+sudo docker compose up
 ```
 
 The API will be available at `http://localhost:5000`.
